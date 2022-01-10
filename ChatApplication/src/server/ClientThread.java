@@ -33,8 +33,9 @@ public class ClientThread extends Thread{
     }
     static ClientThread findClient(List<ClientThread> list, String username){
         for(ClientThread cThread: list){
-            if(cThread.getUser()!=null){
-                if(cThread.getUser().getUsername()==username){
+            User user =cThread.getUser();
+            if(user!=null){
+                if(user.getUsername().equals(username)){
                     return cThread;
                 }
             }

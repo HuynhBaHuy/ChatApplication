@@ -117,10 +117,11 @@ class ThreadReceviedHandler extends Thread {
         }
     }
     public void run(){
+        try {
         while(true){
-            try {
+
                 String command = br.readLine();
-                switch(command){
+                switch(command) {
                     case "new online user": {
                         String username = br.readLine();
                         System.out.println(username + " is online");
@@ -145,9 +146,10 @@ class ThreadReceviedHandler extends Thread {
                         break;
                     }
                 }
-            }catch (Exception e){
-                System.out.println(e.getMessage());
-            }
+        }
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+
         }
     }
 }
