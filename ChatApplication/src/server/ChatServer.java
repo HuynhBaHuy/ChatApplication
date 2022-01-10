@@ -5,6 +5,7 @@ package server;/*..
  * Description:...
  */
 
+import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -25,10 +26,11 @@ public class ChatServer {
                 System.out.println("Waiting for client...");
                 try {
                     Socket socket = ss.accept();
+                    String ip=(((InetSocketAddress) socket.getRemoteSocketAddress()).getAddress()).toString().replace("/","");
                     ClientThread clientThread = new ClientThread(socket);
                     clientThreadList.add(clientThread);
+                    System.out.println("Accept client "+ip);
                     clientThread.start();
-                    System.out.println("Accept client!");
                 }catch(Exception e){
                     System.out.println(e.getMessage());
                 }

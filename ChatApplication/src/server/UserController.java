@@ -28,12 +28,20 @@ public class UserController {
             System.out.println(e.getMessage());
         }
     }
-    public User login(String username, String password){
+    public Boolean isExistUsername(String username){
         for(User user:listUser){
-            if(user.getUsername().equals(username)&&user.getUsername().equals(password)){
-                return user;
+            if(user.getUsername().equals(username)){
+                return true;
             }
         }
-        return null;
+        return false;
+    }
+    public Boolean validate(String username, String password){
+        for(User user:listUser){
+            if(user.getUsername().equals(username)&&user.getPassword().equals(password)){
+                return true;
+            }
+        }
+        return false;
     }
 }
