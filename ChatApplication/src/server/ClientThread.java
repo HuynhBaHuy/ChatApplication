@@ -5,10 +5,7 @@ package server;/*..
  * Description:...
  */
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
@@ -53,13 +50,14 @@ public class ClientThread extends Thread{
                         String username = br.readLine();
                         String password = br.readLine();
                         Boolean isValidateSuccess = ChatServer.userController.validate(username, password);
-                        ClientThread onlineUser = ClientThread.findClient(ChatServer.clientThreadList, username);
-                        if (isValidateSuccess && onlineUser == null) {
+                        if (isValidateSuccess) {
+                            System.out.println(username+" login");
                             bw.write("login success");
                             bw.newLine();
                             bw.flush();
                             this.user = new User(username, password);
                             // send to other users
+                            System.out.println("Notify other users that "+username+" is online");
                             for (ClientThread cThread : ChatServer.clientThreadList) {
                                 if (cThread.equals(this)) {
                                     continue;
@@ -71,6 +69,8 @@ public class ClientThread extends Thread{
                                 cThread.bw.flush();
                             }
                         } else {
+                            // login failed
+                            System.out.println(username+" login failed.");
                             bw.write("login failed");
                             bw.newLine();
                             bw.flush();
@@ -78,6 +78,7 @@ public class ClientThread extends Thread{
                         break;
                     }
                     case "load list online user": {
+                        System.out.println(user.getUsername()+" loading list online user");
                         bw.write("list online user");
                         bw.newLine();
                         List<User> onlineUsers = new ArrayList<>();
@@ -99,20 +100,23 @@ public class ClientThread extends Thread{
                         break;
                     }
                     case "send message": {
+                        System.out.println(user.getUsername()+" is sending message...");
                         String otherUsername = br.readLine();
                         String content = br.readLine();
 
                         //send to another User
                         Boolean isExist = ChatServer.userController.isExistUsername(otherUsername);
-                        if (isExist) {
+                        if (isExist&&!otherUsername.equals(user.getUsername())){
                             ClientThread anotherUserThread = ClientThread.findClient(ChatServer.clientThreadList, otherUsername);
                             if (anotherUserThread == null) {
+                                System.out.println("Notify "+user.getUsername()+" that "+otherUsername+"is not online");
                                 bw.write("username not online");
                                 bw.newLine();
                                 bw.write(otherUsername);
                                 bw.newLine();
                                 bw.flush();
                             } else {
+                                System.out.println(user.getUsername()+" sends message success");
                                 anotherUserThread.bw.write("receive message");
                                 anotherUserThread.bw.newLine();
                                 anotherUserThread.bw.write(this.user.getUsername());
@@ -123,19 +127,49 @@ public class ClientThread extends Thread{
                             }
                         } else {
                             bw.write("username not existed");
-                            bw.newLine();
+
                             bw.write(otherUsername);
                             bw.newLine();
                             bw.flush();
                         }
                         break;
                     }
+                    case "sign up":{
+
+                        String username = br.readLine();
+                        String password = br.readLine();
+                        Boolean success =ChatServer.userController.signUp(username,password);
+                        if(success){
+                            System.out.println(username+" sign up successful");
+                            bw.write("sign up success");
+                            bw.newLine();
+                            bw.flush();
+                        }
+                        else{
+                            System.out.println(username+" sign up failed");
+                            bw.write("sign up failed");
+                            bw.newLine();
+                            bw.flush();
+                        }
+                        break;
+                    }
+                    case "logout" :{
+                        System.out.println(user.getUsername()+" logout");
+                        ChatServer.clientThreadList.remove(this);
+                    }
                     default:
-                        System.out.println("default");
+                        System.out.println("Unknown package");
                 }
             }
-        }catch(Exception e){
-            System.out.println(e.getMessage());
+        }catch(Exception exception){
+            try {
+                if (socket.getInetAddress().isReachable(1000)) {
+                    System.out.println(user.getUsername()+" is disconnected");
+                }
+            }catch (Exception e){
+                System.out.println(e.getMessage());
+            }
+
         }
 
     }

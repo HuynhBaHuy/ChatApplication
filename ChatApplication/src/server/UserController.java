@@ -36,6 +36,16 @@ public class UserController {
         }
         return false;
     }
+    public Boolean signUp(String username,String password){
+        for(User user:listUser){
+            if(user.getUsername().equals(username)){
+                return false;
+            }
+        }
+        User newUser = new User(username,password);
+        listUser.add(newUser);
+        return true;
+    }
     public Boolean validate(String username, String password){
         for(User user:listUser){
             if(user.getUsername().equals(username)&&user.getPassword().equals(password)){

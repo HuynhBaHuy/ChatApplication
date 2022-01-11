@@ -13,11 +13,11 @@ import java.util.List;
 
 public class ChatServer {
     ServerSocket ss;
-    static UserController userController;
+    static UserController userController = new UserController();
     static List<ClientThread> clientThreadList = new ArrayList<>();
     public ChatServer(){
         //load user list
-        userController = new UserController();
+
         // start server
         try{
             System.out.println("Server booting ...");
