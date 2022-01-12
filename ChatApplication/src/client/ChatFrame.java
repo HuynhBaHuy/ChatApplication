@@ -131,7 +131,6 @@ public class ChatFrame extends JFrame implements ActionListener {
                 while(true){
                     System.out.println("receiving thread is running...");
                     String command = br.readLine();
-                    System.out.println(command);
                     switch (command) {
                         case "new online user" -> {
                             String username = br.readLine();
@@ -148,6 +147,13 @@ public class ChatFrame extends JFrame implements ActionListener {
                         case "username not existed" -> {
                             String otherUser = br.readLine();
                             System.out.println(otherUser + " is not existed");
+                        }
+                        case "someone logout" ->{
+                            String username = br.readLine();
+                            listOnlineUsersModel.removeElement(username);
+                            if(nameUserLabel.getText().equals(username)){
+                                nameUserLabel.setText(username+" - Not online");
+                            }
                         }
                     }
                 }
@@ -228,7 +234,6 @@ public class ChatFrame extends JFrame implements ActionListener {
                 boxChatArea.append("\n");
                 String content = messageTextField.getText();
                 listOnlineUsersModel.addElement(content);
-
                 messageTextField.setText("");
             }
             case "attach":{
@@ -238,7 +243,9 @@ public class ChatFrame extends JFrame implements ActionListener {
 
             }
             case "logout":{
-
+                socketController.sendLogoutToServer();
+                this.dispose();
+                new LoginFrame();
             }
         }
     }

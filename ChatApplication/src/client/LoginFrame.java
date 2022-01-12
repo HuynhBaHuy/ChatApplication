@@ -182,10 +182,10 @@ public class LoginFrame extends JFrame implements ActionListener {
             SocketController socketController;
             do {
                 socketController = new SocketController();
-                if(!socketController.isConnected()){
+                if(socketController.isConnectedToServer()){
                     JOptionPane.showMessageDialog(this,"Server is not running"," Lost Connection",JOptionPane.ERROR_MESSAGE);
                 }
-            }while(!socketController.isConnected());
+            }while(socketController.isConnectedToServer());
             String username = usernameTextField.getText();
             String password = new String(passwordField.getPassword());
             Boolean isSuccess = socketController.sendLoginToServer(username, password);

@@ -156,6 +156,14 @@ public class ClientThread extends Thread{
                     case "logout" :{
                         System.out.println(user.getUsername()+" logout");
                         ChatServer.clientThreadList.remove(this);
+                        for (ClientThread cThread : ChatServer.clientThreadList) {
+                            // send disconnect to other user
+                            cThread.bw.write("someone logout");
+                            cThread.bw.newLine();
+                            cThread.bw.write(this.user.getUsername());
+                            cThread.bw.newLine();
+                            cThread.bw.flush();
+                        }
                     }
                     default:
                         System.out.println("Unknown package");

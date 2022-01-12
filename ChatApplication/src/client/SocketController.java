@@ -75,9 +75,6 @@ public class SocketController {
         }
         return listOnlineUsers;
     }
-    public BufferedWriter getSender(){
-        return bw;
-    }
     public  BufferedReader getReader(){
         return br;
     }
@@ -95,11 +92,20 @@ public class SocketController {
         }
         return true;
     }
-    public boolean isConnected() {
+    public void sendLogoutToServer(){
+        try {
+            bw.write("logout");
+            bw.newLine();
+            bw.flush();
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
+    public boolean isConnectedToServer() {
          if(socket==null){
-             return false;
+             return true;
          }
-         return true;
+         return false;
     }
     public SocketController(){
         try{
