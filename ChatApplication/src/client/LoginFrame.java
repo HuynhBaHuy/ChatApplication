@@ -99,7 +99,17 @@ public class LoginFrame extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         String command = e.getActionCommand();
         if(command.equals("login")){
+            SocketController socketController = new SocketController();
+            String username = usernameTextField.getText();
+            String password = passwordField.getText();
+            Boolean isSuccess = socketController.sendLoginToServer(username, password);
+            if(isSuccess){
+                this.dispose();
+                new ChatFrame(socketController,username);
+            }
+            else{
 
+            }
         }
         else if(command.equals("sign up")){
             new SignupFrame();

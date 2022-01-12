@@ -163,7 +163,9 @@ public class ClientThread extends Thread{
             }
         }catch(Exception exception){
             try {
+                System.out.println(exception.getMessage());
                 if (socket.getInetAddress().isReachable(1000)) {
+                    Thread.currentThread().interrupt();
                     System.out.println(user.getUsername()+" is disconnected");
                 }
             }catch (Exception e){

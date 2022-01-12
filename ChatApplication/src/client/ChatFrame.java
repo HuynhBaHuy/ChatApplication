@@ -5,17 +5,23 @@ package client;/*..
  * Description:...
  */
 
+import client.data.BoxChatData;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.BufferedReader;
+import java.util.ArrayList;
 
 public class ChatFrame extends JFrame implements ActionListener {
-    public static void main(String[] args){
-        new ChatFrame();
-    }
+    BoxChatData data;
     JPanel mainPanel;
-    JScrollPane listOnlineUsers;
+    JScrollPane listOnlineUsersPane;
+    JList<String> listOnlineUsers;
+    DefaultListModel<String> listOnlineUsersModel;
     JTextField messageTextField;
     JLabel nameUserLabel;
     JButton sendButton;
@@ -24,18 +30,44 @@ public class ChatFrame extends JFrame implements ActionListener {
     JButton emojiButton;
     JTextArea boxChatArea;
     JButton logoutButton;
-    public  ChatFrame(){
+    SocketController socketController;
+    public ChatFrame(SocketController socketController,String username){
+        this.socketController = socketController;
+        data=new BoxChatData(username);
         // init panel
         mainPanel = new JPanel(new BorderLayout());
         //left panel: list user online and logout
         JPanel contentPanel = new JPanel(new GridBagLayout());
         //sendPanel: wrap all button for sending
         JPanel sendPanel = new JPanel(new GridBagLayout());
-        nameUserLabel = new JLabel("Huynh Ba Huy");
+
+        nameUserLabel = new JLabel(username);
         nameUserLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        listOnlineUsers = new JScrollPane();
-        boxChatArea = new JTextArea();
-        messageTextField = new JTextField();
+
+        listOnlineUsersModel = new DefaultListModel<>();
+        ArrayList<String> onlineUsers = socketController.loadListOnlineUsers();
+        for(String user : onlineUsers){
+            listOnlineUsersModel.addElement(user);
+        }
+        listOnlineUsers = new JList<>(listOnlineUsersModel);
+        listOnlineUsers.addMouseListener(new MouseAdapter(){
+            public void mouseClicked(MouseEvent e) {
+                if(e.getClickCount()==1){
+                    JList target = (JList)e.getSource();
+                    int index = target.locationToIndex(e.getPoint());
+                    if(index>=0){
+                        Object usernameObj = target.getModel().getElementAt(index);
+                        nameUserLabel.setText(usernameObj.toString());
+                    }
+                }
+
+            }
+        });
+        listOnlineUsersPane = new JScrollPane(listOnlineUsers);
+        boxChatArea = new JTextArea(3,5);
+        boxChatArea.setEditable(false);
+        JScrollPane boxchatScrollPane = new JScrollPane(boxChatArea);
+
         sendButton = new JButton(new ImageIcon("images/sendIcon.png"));
         sendButton.addActionListener(this);
         sendButton.setActionCommand("send");
@@ -56,7 +88,17 @@ public class ChatFrame extends JFrame implements ActionListener {
         logoutButton.addActionListener(this);
         logoutButton.setActionCommand("logout");
         logoutButton.setBackground(Themes.themeColor);
-
+        messageTextField = new JTextField(20);
+        Action action = new AbstractAction()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                sendButton.doClick();
+                messageTextField.setText("");
+            }
+        };
+        messageTextField.addActionListener(action);
         createLeftPanel(contentPanel);
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.weightx=1;
@@ -71,7 +113,7 @@ public class ChatFrame extends JFrame implements ActionListener {
         gbc.gridx = 1;
         gbc.gridy = 1;
         gbc.gridheight = 4;
-        contentPanel.add(boxChatArea,gbc);
+        contentPanel.add(boxchatScrollPane,gbc);
         gbc.ipady=0;
 
         createSendPanel(sendPanel);
@@ -80,6 +122,38 @@ public class ChatFrame extends JFrame implements ActionListener {
         contentPanel.add(sendPanel,gbc);
         mainPanel.add(contentPanel,BorderLayout.CENTER);
         prepareGUI();
+        startReceivingThread();
+    }
+    private void startReceivingThread() {
+        BufferedReader br = socketController.getReader();
+        new Thread(() -> {
+            try {
+                while(true){
+                    String command = br.readLine();
+                    switch (command) {
+                        case "new online user" -> {
+                            String username = br.readLine();
+                            listOnlineUsersModel.addElement(username);
+                        }
+                        case "receive message" -> {
+                            String username = br.readLine();
+                            String content = br.readLine();
+                        }
+                        case "username not online" -> {
+                            String otherUser = br.readLine();
+                            System.out.println(otherUser + " is offline now");
+                        }
+                        case "username not existed" -> {
+                            String otherUser = br.readLine();
+                            System.out.println(otherUser + " is not existed");
+                        }
+                    }
+                }
+            }catch (Exception e){
+                System.out.println(e.getMessage());
+
+            }
+        });
     }
     private void createLeftPanel(JPanel container){
         GridBagConstraints gbc = new GridBagConstraints();
@@ -96,7 +170,7 @@ public class ChatFrame extends JFrame implements ActionListener {
         gbc.fill = GridBagConstraints.BOTH;
         gbc.ipady=300;
         gbc.gridheight=5;
-        container.add(listOnlineUsers,gbc);
+        container.add(listOnlineUsersPane,gbc);
         gbc.gridx = 0;
         gbc.gridy=6;
         gbc.ipady=0;
@@ -125,6 +199,7 @@ public class ChatFrame extends JFrame implements ActionListener {
 
         gbc.gridx=2;
         gbc.gridwidth=1;
+        gbc.ipadx = 0;
         container.add(sendButton,gbc);
     }
     private void prepareGUI(){
@@ -143,6 +218,24 @@ public class ChatFrame extends JFrame implements ActionListener {
      */
     @Override
     public void actionPerformed(ActionEvent e) {
+        String command = e.getActionCommand();
+        switch (command){
+            case "send":{
+                boxChatArea.append("me: ");
+                boxChatArea.append(messageTextField.getText());
+                boxChatArea.append("\n");
+                String content = messageTextField.getText();
 
+            }
+            case "attach":{
+
+            }
+            case  "voice":{
+
+            }
+            case "logout":{
+
+            }
+        }
     }
 }
