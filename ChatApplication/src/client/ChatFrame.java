@@ -129,7 +129,9 @@ public class ChatFrame extends JFrame implements ActionListener {
         new Thread(() -> {
             try {
                 while(true){
+                    System.out.println("receiving thread is running...");
                     String command = br.readLine();
+                    System.out.println(command);
                     switch (command) {
                         case "new online user" -> {
                             String username = br.readLine();
@@ -153,7 +155,7 @@ public class ChatFrame extends JFrame implements ActionListener {
                 System.out.println(e.getMessage());
 
             }
-        });
+        }).start();
     }
     private void createLeftPanel(JPanel container){
         GridBagConstraints gbc = new GridBagConstraints();
@@ -225,7 +227,9 @@ public class ChatFrame extends JFrame implements ActionListener {
                 boxChatArea.append(messageTextField.getText());
                 boxChatArea.append("\n");
                 String content = messageTextField.getText();
+                listOnlineUsersModel.addElement(content);
 
+                messageTextField.setText("");
             }
             case "attach":{
 

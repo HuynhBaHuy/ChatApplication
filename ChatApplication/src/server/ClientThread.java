@@ -43,7 +43,6 @@ public class ClientThread extends Thread{
     public void run(){
         try {
             while(true){
-
                 String command = br.readLine();
                 switch(command){
                     case "login": {
@@ -51,15 +50,14 @@ public class ClientThread extends Thread{
                         String password = br.readLine();
                         Boolean isValidateSuccess = ChatServer.userController.validate(username, password);
                         if (isValidateSuccess) {
-                            System.out.println(username+" login");
+                            System.out.println(username+" login successful");
                             bw.write("login success");
                             bw.newLine();
                             bw.flush();
                             this.user = new User(username, password);
                             // send to other users
-                            System.out.println("Notify other users that "+username+" is online");
                             for (ClientThread cThread : ChatServer.clientThreadList) {
-                                if (cThread.equals(this)) {
+                                if (cThread.equals(this)||cThread.user.getUsername().equals(username)) {
                                     continue;
                                 }
                                 cThread.bw.write("new online user");
@@ -67,6 +65,7 @@ public class ClientThread extends Thread{
                                 cThread.bw.write(username);
                                 cThread.bw.newLine();
                                 cThread.bw.flush();
+                                System.out.println("show "+username+" is online to "+cThread.user.getUsername());
                             }
                         } else {
                             // login failed
@@ -78,7 +77,7 @@ public class ClientThread extends Thread{
                         break;
                     }
                     case "load list online user": {
-                        System.out.println(user.getUsername()+" loading list online user");
+                        System.out.println(user.getUsername()+" is loading list online user");
                         bw.write("list online user");
                         bw.newLine();
                         List<User> onlineUsers = new ArrayList<>();
@@ -97,6 +96,7 @@ public class ClientThread extends Thread{
                             bw.newLine();
                         }
                         bw.flush();
+                        System.out.println(user.getUsername()+" done loading");
                         break;
                     }
                     case "send message": {
@@ -163,9 +163,10 @@ public class ClientThread extends Thread{
             }
         }catch(Exception exception){
             try {
-                System.out.println(exception.getMessage());
                 if (socket.getInetAddress().isReachable(1000)) {
-                    Thread.currentThread().interrupt();
+                    br.close();
+                    bw.close();
+                    ChatServer.clientThreadList.remove(this);
                     System.out.println(user.getUsername()+" is disconnected");
                 }
             }catch (Exception e){

@@ -8,7 +8,6 @@ package client;/*..
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.List;
 
 public class SocketController {
     private Socket socket;
@@ -76,6 +75,12 @@ public class SocketController {
             System.out.println(e.getMessage());
         }
         return true;
+    }
+    public boolean isConnected() {
+         if(socket==null){
+             return false;
+         }
+         return true;
     }
     public SocketController(){
         try{

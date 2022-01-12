@@ -12,9 +12,7 @@ import java.awt.event.ActionListener;
 
 public class LoginFrame extends JFrame implements ActionListener {
 
-    public static void main(String[] args){
-        new LoginFrame();
-    }
+
     JPanel mainPanel;
     JTextField usernameTextField;
     JPasswordField passwordField;
@@ -99,7 +97,13 @@ public class LoginFrame extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         String command = e.getActionCommand();
         if(command.equals("login")){
-            SocketController socketController = new SocketController();
+            SocketController socketController;
+            do {
+                socketController = new SocketController();
+                if(!socketController.isConnected()){
+                    JOptionPane.showMessageDialog(this,"Server is not running"," Lost Connection",JOptionPane.ERROR_MESSAGE);
+                }
+            }while(!socketController.isConnected());
             String username = usernameTextField.getText();
             String password = passwordField.getText();
             Boolean isSuccess = socketController.sendLoginToServer(username, password);
