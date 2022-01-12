@@ -9,6 +9,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 public class LoginFrame extends JFrame implements ActionListener {
 
@@ -30,7 +32,87 @@ public class LoginFrame extends JFrame implements ActionListener {
         footerPanel.add(controlPanel);
         //init component
         usernameTextField = new JTextField();
+        usernameTextField.addKeyListener(new KeyListener(){
+
+            /**
+             * Invoked when a key has been typed.
+             * See the class description for {@link KeyEvent} for a definition of
+             * a key typed event.
+             *
+             * @param e the event to be processed
+             */
+            @Override
+            public void keyTyped(KeyEvent e) {
+
+            }
+
+            /**
+             * Invoked when a key has been pressed.
+             * See the class description for {@link KeyEvent} for a definition of
+             * a key pressed event.
+             *
+             * @param e the event to be processed
+             */
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode()==KeyEvent.VK_ENTER){
+                    loginButton.doClick();
+                }
+            }
+
+            /**
+             * Invoked when a key has been released.
+             * See the class description for {@link KeyEvent} for a definition of
+             * a key released event.
+             *
+             * @param e the event to be processed
+             */
+            @Override
+            public void keyReleased(KeyEvent e) {
+
+            }
+        });
         passwordField = new JPasswordField();
+        passwordField.addKeyListener(new KeyListener(){
+
+            /**
+             * Invoked when a key has been typed.
+             * See the class description for {@link KeyEvent} for a definition of
+             * a key typed event.
+             *
+             * @param e the event to be processed
+             */
+            @Override
+            public void keyTyped(KeyEvent e) {
+
+            }
+
+            /**
+             * Invoked when a key has been pressed.
+             * See the class description for {@link KeyEvent} for a definition of
+             * a key pressed event.
+             *
+             * @param e the event to be processed
+             */
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode()==KeyEvent.VK_ENTER){
+                    loginButton.doClick();
+                }
+            }
+
+            /**
+             * Invoked when a key has been released.
+             * See the class description for {@link KeyEvent} for a definition of
+             * a key released event.
+             *
+             * @param e the event to be processed
+             */
+            @Override
+            public void keyReleased(KeyEvent e) {
+
+            }
+        });
         signupButton = new JButton("Sign Up");
         loginButton = new JButton("Login");
         signupButton.addActionListener(this);
@@ -105,14 +187,14 @@ public class LoginFrame extends JFrame implements ActionListener {
                 }
             }while(!socketController.isConnected());
             String username = usernameTextField.getText();
-            String password = passwordField.getText();
+            String password = new String(passwordField.getPassword());
             Boolean isSuccess = socketController.sendLoginToServer(username, password);
             if(isSuccess){
                 this.dispose();
                 new ChatFrame(socketController,username);
             }
             else{
-
+                JOptionPane.showMessageDialog(this,"Incorrect username or password","Login Failed",JOptionPane.ERROR_MESSAGE);
             }
         }
         else if(command.equals("sign up")){

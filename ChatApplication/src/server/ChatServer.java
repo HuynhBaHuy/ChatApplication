@@ -13,7 +13,7 @@ import java.util.List;
 
 public class ChatServer {
     ServerSocket ss;
-    static UserController userController = new UserController();
+    static final UserController userController = new UserController();
     static List<ClientThread> clientThreadList = new ArrayList<>();
     public ChatServer(){
         //load user list

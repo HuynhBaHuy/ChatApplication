@@ -13,7 +13,26 @@ public class SocketController {
     private Socket socket;
     private BufferedReader br;
     private BufferedWriter bw;
+    public Boolean sendRegisterToServer(String username, String password){
+        try {
+            bw.write("sign up");
+            bw.newLine();
+            bw.write(username);
+            bw.newLine();
+            bw.write(password);
+            bw.newLine();
+            bw.flush();
+            String command = br.readLine();
+            if(command.equals("sign up success")){
 
+                return true;
+
+            }
+        }catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+        return false;
+    }
     public Boolean sendLoginToServer(String username, String password){
         try {
             bw.write("login");

@@ -7,15 +7,16 @@ package server;/*..
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
 public class UserController {
     List<User> listUser;
     public UserController() {
-        listUser = new ArrayList<User>();
+        listUser = new ArrayList<>();
         try {
-            BufferedReader readFile = new BufferedReader(new FileReader("data.txt"));
+            BufferedReader readFile = new BufferedReader(new FileReader(File.fileAccount));
             while(true){
                 String account = readFile.readLine();
                 if(account==null){
@@ -44,6 +45,19 @@ public class UserController {
         }
         User newUser = new User(username,password);
         listUser.add(newUser);
+        try {
+            PrintWriter writer = new PrintWriter(File.fileAccount);
+            synchronized(writer){
+                for(User user : listUser){
+                    writer.println(user.getUsername()+" "+user.getPassword());
+                }
+            }
+            writer.close();
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+            return false;
+        }
+
         return true;
     }
     public Boolean validate(String username, String password){

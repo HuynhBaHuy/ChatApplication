@@ -138,7 +138,7 @@ public class ClientThread extends Thread{
 
                         String username = br.readLine();
                         String password = br.readLine();
-                        Boolean success =ChatServer.userController.signUp(username,password);
+                        Boolean success = ChatServer.userController.signUp(username,password);
                         if(success){
                             System.out.println(username+" sign up successful");
                             bw.write("sign up success");

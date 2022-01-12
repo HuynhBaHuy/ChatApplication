@@ -9,6 +9,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 public class SignupFrame extends JFrame implements ActionListener {
     public static void main(String[] args){
@@ -32,8 +34,128 @@ public class SignupFrame extends JFrame implements ActionListener {
         footerPanel.add(controlPanel);
         //init component
         usernameTextField = new JTextField();
+        usernameTextField.addKeyListener(new KeyListener(){
+
+            /**
+             * Invoked when a key has been typed.
+             * See the class description for {@link KeyEvent} for a definition of
+             * a key typed event.
+             *
+             * @param e the event to be processed
+             */
+            @Override
+            public void keyTyped(KeyEvent e) {
+
+            }
+
+            /**
+             * Invoked when a key has been pressed.
+             * See the class description for {@link KeyEvent} for a definition of
+             * a key pressed event.
+             *
+             * @param e the event to be processed
+             */
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode()==KeyEvent.VK_ENTER){
+                    signupButton.doClick();
+                }
+            }
+
+            /**
+             * Invoked when a key has been released.
+             * See the class description for {@link KeyEvent} for a definition of
+             * a key released event.
+             *
+             * @param e the event to be processed
+             */
+            @Override
+            public void keyReleased(KeyEvent e) {
+
+            }
+        });
         passwordField = new JPasswordField();
+        passwordField.addKeyListener(new KeyListener(){
+
+            /**
+             * Invoked when a key has been typed.
+             * See the class description for {@link KeyEvent} for a definition of
+             * a key typed event.
+             *
+             * @param e the event to be processed
+             */
+            @Override
+            public void keyTyped(KeyEvent e) {
+
+            }
+
+            /**
+             * Invoked when a key has been pressed.
+             * See the class description for {@link KeyEvent} for a definition of
+             * a key pressed event.
+             *
+             * @param e the event to be processed
+             */
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode()==KeyEvent.VK_ENTER){
+                    signupButton.doClick();
+                }
+            }
+
+            /**
+             * Invoked when a key has been released.
+             * See the class description for {@link KeyEvent} for a definition of
+             * a key released event.
+             *
+             * @param e the event to be processed
+             */
+            @Override
+            public void keyReleased(KeyEvent e) {
+
+            }
+        });
         confirmPasswordField = new JPasswordField();
+        confirmPasswordField.addKeyListener(new KeyListener(){
+
+            /**
+             * Invoked when a key has been typed.
+             * See the class description for {@link KeyEvent} for a definition of
+             * a key typed event.
+             *
+             * @param e the event to be processed
+             */
+            @Override
+            public void keyTyped(KeyEvent e) {
+
+            }
+
+            /**
+             * Invoked when a key has been pressed.
+             * See the class description for {@link KeyEvent} for a definition of
+             * a key pressed event.
+             *
+             * @param e the event to be processed
+             */
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode()==KeyEvent.VK_ENTER){
+                    signupButton.doClick();
+                }
+            }
+
+            /**
+             * Invoked when a key has been released.
+             * See the class description for {@link KeyEvent} for a definition of
+             * a key released event.
+             *
+             * @param e the event to be processed
+             */
+            @Override
+            public void keyReleased(KeyEvent e) {
+
+            }
+        });
         signupButton = new JButton("Sign Up");
         backToLoginBtn = new JButton("Back to login");
         signupButton.addActionListener(this);
@@ -111,7 +233,34 @@ public class SignupFrame extends JFrame implements ActionListener {
             this.dispose();
         }
         else if(command.equals("sign up")){
+            String username = usernameTextField.getText();
+            String password = new String(passwordField.getPassword());
+            String confirmPassword = new String(confirmPasswordField.getPassword());
+            if(password.isEmpty()||confirmPassword.isEmpty()||username.isEmpty()){
+                JOptionPane.showMessageDialog(this,"Please fill in all fields","Blank detection",JOptionPane.WARNING_MESSAGE);
+            }
+            else {
+                if (password.equals(confirmPassword)) {
+                    SocketController socketController;
+                    do {
+                        socketController = new SocketController();
+                        if (!socketController.isConnected()) {
+                            JOptionPane.showMessageDialog(this, "Server is not running", " Lost Connection", JOptionPane.ERROR_MESSAGE);
+                        }
+                    } while (!socketController.isConnected());
 
+                    Boolean isSuccess = socketController.sendRegisterToServer(username, password);
+                    if (isSuccess) {
+                        new LoginFrame();
+                        this.setVisible(false);
+                        this.dispose();
+                    } else {
+                        JOptionPane.showMessageDialog(this, "This username have already existed", "Register failed", JOptionPane.ERROR_MESSAGE);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(this, "Confirm password is not match", "Didn't match password", JOptionPane.WARNING_MESSAGE);
+                }
+            }
         }
         else{
             System.out.println("Unknown clicked - not define event handling");
