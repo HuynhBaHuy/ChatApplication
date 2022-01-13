@@ -14,6 +14,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
+import java.io.File;
 import java.util.ArrayList;
 
 public class ChatFrame extends JFrame implements ActionListener {
@@ -31,8 +32,10 @@ public class ChatFrame extends JFrame implements ActionListener {
     JButton emojiButton;
     JTextPane boxChatPane;
     JButton logoutButton;
+    final JFileChooser fileChooser = new JFileChooser();
     SocketController socketController;
     public ChatFrame(SocketController socketController, String username){
+        fileChooser.setMultiSelectionEnabled(true);
         usernameOfClient = username;
         this.socketController = socketController;
         data=new BoxChatData();
@@ -258,6 +261,18 @@ public class ChatFrame extends JFrame implements ActionListener {
                 break;
             }
             case "attach":{
+                int returnVal = fileChooser.showDialog(this,"Attach");
+                if(returnVal == JFileChooser.APPROVE_OPTION){
+                    File[] files = fileChooser.getSelectedFiles();
+                    for (File f:files){
+                        System.out.println("Opening: " + f.getName() + ".");
+                    }
+                    socketController.sendFilesToServer(files);
+                }
+                else{
+                    System.out.println("Open command cancelled by user.");
+                }
+
                 break;
             }
             case  "voice":{

@@ -165,6 +165,12 @@ public class ClientThread extends Thread{
                             cThread.bw.flush();
                         }
                     }
+                    case "send file":{
+                        String fileName = br.readLine();
+                        Integer fileSize = Integer.parseInt(br.readLine());
+                        System.out.println(fileName+fileSize);
+                        break;
+                    }
                     default:
                         System.out.println("Unknown package");
                 }

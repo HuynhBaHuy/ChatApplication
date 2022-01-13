@@ -78,7 +78,33 @@ public class SocketController {
     public  BufferedReader getReader(){
         return br;
     }
-    public Boolean sendMessageToServer(String content, String otherUser){
+    public void sendFilesToServer(File[] files){
+        try {
+            OutputStream os = socket.getOutputStream();
+            PrintWriter pr = new PrintWriter(os,true);
+
+            for (File file:files){
+                bw.write("send file");
+                bw.newLine();
+                bw.write(file.getName());
+                bw.newLine();
+                bw.write((int)file.length());
+                bw.newLine();
+                BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file));
+                int fileSize = (int)file.length();
+                byte[] bytes = new byte[fileSize];
+                bis.read(bytes,0,bytes.length);
+                os.write(bytes,0,fileSize);
+                os.flush();
+                System.out.println("Opening: " + file.getName() + ".");
+            }
+        }catch (Exception e){
+
+        }
+
+
+    }
+    public void sendMessageToServer(String content, String otherUser){
         try {
             bw.write("send message");
             bw.newLine();
@@ -90,7 +116,6 @@ public class SocketController {
         }catch (IOException e) {
             System.out.println(e.getMessage());
         }
-        return true;
     }
     public void sendLogoutToServer(){
         try {
