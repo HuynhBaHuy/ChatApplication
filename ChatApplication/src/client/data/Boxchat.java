@@ -11,6 +11,7 @@ import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 import java.awt.*;
+import java.io.File;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -78,5 +79,11 @@ public class Boxchat {
         } catch (BadLocationException ex) {
             System.out.println(ex.getMessage());
         }
+    }
+    public void sendFile(File a){
+
+    }
+    public void receiveFile(byte[] buffer,String fileName,int fileSize){
+
     }
 }

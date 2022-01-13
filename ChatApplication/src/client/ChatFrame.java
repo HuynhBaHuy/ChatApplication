@@ -13,8 +13,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.BufferedReader;
-import java.io.File;
+import java.io.*;
 import java.util.ArrayList;
 
 public class ChatFrame extends JFrame implements ActionListener {
@@ -175,6 +174,19 @@ public class ChatFrame extends JFrame implements ActionListener {
                             data.removeBoxChat(username);
                             listOnlineUsersModel.removeElement(username);
                         }
+                        case "receive file"->{
+                            String username = br.readLine();
+                            String fileName = br.readLine();
+                            int fileSize = Integer.parseInt(br.readLine());
+                            System.out.println(fileName+fileSize);
+                            InputStream is = socketController.getInputStream();
+                            byte[] bytes = new byte[fileSize];
+                            BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(fileName));
+                            int file = is.read(bytes,0,bytes.length);
+                            bos.write(bytes,0,file);
+                            data.findBoxChat(username).receiveFile(bytes,fileName,fileSize);
+                            bos.close();
+                        }
                     }
                 }
             }catch (Exception e){
@@ -247,42 +259,44 @@ public class ChatFrame extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         String command = e.getActionCommand();
         switch (command){
-            case "send":{
+            case "send"->{
                 String content = messageTextField.getText();
                 String username = listOnlineUsers.getSelectedValue();
                 if(username==null){
-                    JOptionPane.showMessageDialog(this,"Please choose who to send message","Cannot send",JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(this,"Please choose who to send message","Cannot send message",JOptionPane.WARNING_MESSAGE);
                     messageTextField.setText("");
                     break;
                 }
                 data.findBoxChat(username).sendMessage(content,usernameOfClient);
                 messageTextField.setText("");
                 socketController.sendMessageToServer(content,username);
-                break;
             }
-            case "attach":{
+            case "attach"->{
+                String username = listOnlineUsers.getSelectedValue();
+                if(username==null){
+                    JOptionPane.showMessageDialog(this,"Please choose who to send files","Cannot send message",JOptionPane.WARNING_MESSAGE);
+                    messageTextField.setText("");
+                    break;
+                }
                 int returnVal = fileChooser.showDialog(this,"Attach");
                 if(returnVal == JFileChooser.APPROVE_OPTION){
                     File[] files = fileChooser.getSelectedFiles();
                     for (File f:files){
                         System.out.println("Opening: " + f.getName() + ".");
                     }
-                    socketController.sendFilesToServer(files);
+                    socketController.sendFilesToServer(files,username);
                 }
                 else{
                     System.out.println("Open command cancelled by user.");
                 }
 
-                break;
             }
-            case  "voice":{
-                break;
+            case  "voice"->{
             }
-            case "logout":{
+            case "logout"->{
                 socketController.sendLogoutToServer();
                 this.dispose();
                 new LoginFrame();
-                break;
             }
         }
     }

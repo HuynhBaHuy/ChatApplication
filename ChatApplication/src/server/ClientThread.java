@@ -6,6 +6,7 @@ package server;/*..
  */
 
 import java.io.*;
+import java.io.File;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
@@ -166,9 +167,55 @@ public class ClientThread extends Thread{
                         }
                     }
                     case "send file":{
-                        String fileName = br.readLine();
-                        Integer fileSize = Integer.parseInt(br.readLine());
-                        System.out.println(fileName+fileSize);
+                        try{
+                            String otherUsername = br.readLine();
+                            String fileName = br.readLine();
+                            int fileSize = Integer.parseInt(br.readLine());
+                            System.out.println(fileName+fileSize);
+                            InputStream is = socket.getInputStream();
+                            byte[] bytes = new byte[fileSize];
+                            BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(fileName));
+                            int file = is.read(bytes,0,bytes.length);
+                            bos.write(bytes,0,file);
+                            System.out.println("Incoming File: " + fileName);
+                            System.out.println("Size: " + fileSize + "Byte");
+
+                            // send buffer to other clients
+                            Boolean isExist = ChatServer.userController.isExistUsername(otherUsername);
+                            if (isExist&&!otherUsername.equals(user.getUsername())){
+                                ClientThread anotherUserThread = ClientThread.findClient(ChatServer.clientThreadList, otherUsername);
+                                if (anotherUserThread == null) {
+                                    System.out.println("Notify "+user.getUsername()+" that "+otherUsername+"is not online");
+                                    bw.write("username not online");
+                                    bw.newLine();
+                                    bw.write(otherUsername);
+                                    bw.newLine();
+                                    bw.flush();
+                                } else {
+                                    System.out.println(user.getUsername()+" sends files success");
+                                    anotherUserThread.bw.write("receive file");
+                                    anotherUserThread.bw.newLine();
+                                    anotherUserThread.bw.write(this.user.getUsername());
+                                    anotherUserThread.bw.newLine();
+                                    anotherUserThread.bw.write(fileName);
+                                    anotherUserThread.bw.newLine();
+                                    anotherUserThread.bw.write(""+fileSize);
+                                    anotherUserThread.bw.newLine();
+                                    anotherUserThread.socket.getOutputStream().write(bytes,0,bytes.length);
+                                    anotherUserThread.socket.getOutputStream().flush();
+                                }
+                            } else {
+                                bw.write("username not existed");
+
+                                bw.write(otherUsername);
+                                bw.newLine();
+                                bw.flush();
+                            }
+
+                            bos.close();
+                        }catch(Exception e){
+                            System.out.println(e.getMessage());
+                        }
                         break;
                     }
                     default:
