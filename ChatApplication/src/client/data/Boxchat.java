@@ -29,7 +29,10 @@ public class Boxchat {
         StyleConstants.setForeground(leftAttr, Color.BLUE);
         StyleConstants.setAlignment(leftAttr, StyleConstants.ALIGN_LEFT);
         try {
-            doc.insertString(doc.getLength(),message+"\n",leftAttr);
+            int offset = doc.getLength();
+            int length = message.length()+1;
+            doc.insertString(doc.getLength(),message+"\n",null);
+            doc.setParagraphAttributes(offset,length,leftAttr,false);
         } catch (BadLocationException ex) {
             System.out.println(ex.getMessage());
         }
@@ -39,7 +42,10 @@ public class Boxchat {
         SimpleAttributeSet rightAttr = new SimpleAttributeSet();
         StyleConstants.setAlignment(rightAttr, StyleConstants.ALIGN_RIGHT);
         try {
-            doc.insertString(doc.getLength(),message+"\n",rightAttr);
+            int offset = doc.getLength();
+            int length = message.length()+1;
+            doc.insertString(offset,message+"\n",null);
+            doc.setParagraphAttributes(offset,length,rightAttr,false);
         } catch (BadLocationException ex) {
             System.out.println(ex.getMessage());
         }

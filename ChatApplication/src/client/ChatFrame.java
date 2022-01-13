@@ -67,7 +67,6 @@ public class ChatFrame extends JFrame implements ActionListener {
                     if(index>=0){
                         Object usernameObj = target.getModel().getElementAt(index);
                         String username = usernameObj.toString();
-                        System.out.println("Username ");
                         boxChatPane.setDocument(data.findBoxChat(username).getBoxchat().getDocument());
                         nameUserLabel.setText(username);
                     }
