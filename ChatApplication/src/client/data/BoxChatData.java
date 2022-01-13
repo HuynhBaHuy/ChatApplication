@@ -4,25 +4,32 @@ package client.data;/*..
  * Date 1/12/2022 9:51 AM
  * Description:...
  */
+
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class BoxChatData {
-    String username;
-    List<String> listOnlineUsers;
-    Message message;
-    Boolean isNewMessage;
-    public BoxChatData(String username){
-        this.username = username;
-        listOnlineUsers = new ArrayList<>();
-        message = new Message();
+    public static List<Boxchat> boxChat = new ArrayList<>();
+    public Boxchat findBoxChat(String username){
+        for(Boxchat box:boxChat){
+            if(box.username.equals(username)){
+                return box;
+            }
+        }
+        return null;
     }
-    public void addNewOnlineUser(String username){
-        listOnlineUsers.add(username);
+    public void appendBoxChat(String username){
+        for(Boxchat box:boxChat){
+            if(box.username.equals(username)){
+                return;
+            }
+        }
+        Boxchat newBoxChat = new Boxchat(username);
+        boxChat.add(newBoxChat);
     }
-    public void newMessage(String message,String username){
-        this.message.username = username;
-        this.message.content = message;
-        isNewMessage = true;
+    public void removeBoxChat(String username){
+        boxChat.removeIf(box -> box.username.equals(username));
+        return;
     }
 }

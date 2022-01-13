@@ -191,7 +191,7 @@ public class LoginFrame extends JFrame implements ActionListener {
             Boolean isSuccess = socketController.sendLoginToServer(username, password);
             if(isSuccess){
                 this.dispose();
-                new ChatFrame(socketController,username);
+                new ChatFrame(socketController);
             }
             else{
                 JOptionPane.showMessageDialog(this,"Incorrect username or password","Login Failed",JOptionPane.ERROR_MESSAGE);

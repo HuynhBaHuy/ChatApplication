@@ -8,6 +8,10 @@ package client;/*..
 import client.data.BoxChatData;
 
 import javax.swing.*;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -28,12 +32,12 @@ public class ChatFrame extends JFrame implements ActionListener {
     JButton attachButton;
     JButton voiceButton;
     JButton emojiButton;
-    JTextArea boxChatArea;
+    JTextPane boxChatPane;
     JButton logoutButton;
     SocketController socketController;
-    public ChatFrame(SocketController socketController,String username){
+    public ChatFrame(SocketController socketController){
         this.socketController = socketController;
-        data=new BoxChatData(username);
+        data=new BoxChatData();
         // init panel
         mainPanel = new JPanel(new BorderLayout());
         //left panel: list user online and logout
@@ -41,13 +45,18 @@ public class ChatFrame extends JFrame implements ActionListener {
         //sendPanel: wrap all button for sending
         JPanel sendPanel = new JPanel(new GridBagLayout());
 
-        nameUserLabel = new JLabel(username);
+        nameUserLabel = new JLabel("ME");
         nameUserLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
         listOnlineUsersModel = new DefaultListModel<>();
         ArrayList<String> onlineUsers = socketController.loadListOnlineUsers();
-        for(String user : onlineUsers){
-            listOnlineUsersModel.addElement(user);
+        boxChatPane = new JTextPane();
+        if(!onlineUsers.isEmpty()){
+            for (String user : onlineUsers) {
+                // create list box chat
+                data.appendBoxChat(user);
+                listOnlineUsersModel.addElement(user);
+            }
         }
         listOnlineUsers = new JList<>(listOnlineUsersModel);
         listOnlineUsers.addMouseListener(new MouseAdapter(){
@@ -57,17 +66,17 @@ public class ChatFrame extends JFrame implements ActionListener {
                     int index = target.locationToIndex(e.getPoint());
                     if(index>=0){
                         Object usernameObj = target.getModel().getElementAt(index);
-                        nameUserLabel.setText(usernameObj.toString());
+                        String username = usernameObj.toString();
+                        System.out.println("Username ");
+                        boxChatPane.setDocument(data.findBoxChat(username).getBoxchat().getDocument());
+                        nameUserLabel.setText(username);
                     }
                 }
 
             }
         });
         listOnlineUsersPane = new JScrollPane(listOnlineUsers);
-        boxChatArea = new JTextArea(3,5);
-        boxChatArea.setEditable(false);
-        JScrollPane boxchatScrollPane = new JScrollPane(boxChatArea);
-
+        JScrollPane boxchatScrollPane = new JScrollPane(boxChatPane);
         sendButton = new JButton(new ImageIcon("images/sendIcon.png"));
         sendButton.addActionListener(this);
         sendButton.setActionCommand("send");
@@ -95,7 +104,7 @@ public class ChatFrame extends JFrame implements ActionListener {
             public void actionPerformed(ActionEvent e)
             {
                 sendButton.doClick();
-                messageTextField.setText("");
+
             }
         };
         messageTextField.addActionListener(action);
@@ -134,11 +143,14 @@ public class ChatFrame extends JFrame implements ActionListener {
                     switch (command) {
                         case "new online user" -> {
                             String username = br.readLine();
+                            // create list box chat
+                            data.appendBoxChat(username);
                             listOnlineUsersModel.addElement(username);
                         }
                         case "receive message" -> {
                             String username = br.readLine();
                             String content = br.readLine();
+                            data.findBoxChat(username).receiveMessage(content);
                         }
                         case "username not online" -> {
                             String otherUser = br.readLine();
@@ -150,10 +162,8 @@ public class ChatFrame extends JFrame implements ActionListener {
                         }
                         case "someone logout" ->{
                             String username = br.readLine();
+                            data.removeBoxChat(username);
                             listOnlineUsersModel.removeElement(username);
-                            if(nameUserLabel.getText().equals(username)){
-                                nameUserLabel.setText(username+" - Not online");
-                            }
                         }
                     }
                 }
@@ -176,7 +186,7 @@ public class ChatFrame extends JFrame implements ActionListener {
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.fill = GridBagConstraints.BOTH;
-        gbc.ipady=300;
+        gbc.ipady=200;
         gbc.gridheight=5;
         container.add(listOnlineUsersPane,gbc);
         gbc.gridx = 0;
@@ -229,23 +239,24 @@ public class ChatFrame extends JFrame implements ActionListener {
         String command = e.getActionCommand();
         switch (command){
             case "send":{
-                boxChatArea.append("me: ");
-                boxChatArea.append(messageTextField.getText());
-                boxChatArea.append("\n");
                 String content = messageTextField.getText();
-                listOnlineUsersModel.addElement(content);
+                String username = nameUserLabel.getText();
+                data.findBoxChat(username).sendMessage(content);
                 messageTextField.setText("");
+                socketController.sendMessageToServer(content,username);
+                break;
             }
             case "attach":{
-
+                break;
             }
             case  "voice":{
-
+                break;
             }
             case "logout":{
                 socketController.sendLogoutToServer();
                 this.dispose();
                 new LoginFrame();
+                break;
             }
         }
     }
