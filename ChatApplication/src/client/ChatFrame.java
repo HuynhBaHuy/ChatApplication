@@ -8,10 +8,6 @@ package client;/*..
 import client.data.BoxChatData;
 
 import javax.swing.*;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.SimpleAttributeSet;
-import javax.swing.text.StyleConstants;
-import javax.swing.text.StyledDocument;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -21,6 +17,7 @@ import java.io.BufferedReader;
 import java.util.ArrayList;
 
 public class ChatFrame extends JFrame implements ActionListener {
+    String usernameOfClient;
     BoxChatData data;
     JPanel mainPanel;
     JScrollPane listOnlineUsersPane;
@@ -35,22 +32,28 @@ public class ChatFrame extends JFrame implements ActionListener {
     JTextPane boxChatPane;
     JButton logoutButton;
     SocketController socketController;
-    public ChatFrame(SocketController socketController){
+    public ChatFrame(SocketController socketController, String username){
+        usernameOfClient = username;
         this.socketController = socketController;
         data=new BoxChatData();
         // init panel
         mainPanel = new JPanel(new BorderLayout());
-        //left panel: list user online and logout
+        //content panel: list user online and logout
         JPanel contentPanel = new JPanel(new GridBagLayout());
-        //sendPanel: wrap all button for sending
+        //send Panel: wrap all button for sending
         JPanel sendPanel = new JPanel(new GridBagLayout());
 
-        nameUserLabel = new JLabel("ME");
+        nameUserLabel = new JLabel("Chat Box");
         nameUserLabel.setHorizontalAlignment(SwingConstants.CENTER);
-
         listOnlineUsersModel = new DefaultListModel<>();
+        listOnlineUsers = new JList<>(listOnlineUsersModel);
+        listOnlineUsers.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
         ArrayList<String> onlineUsers = socketController.loadListOnlineUsers();
+        listOnlineUsers.setFixedCellWidth(3);
+        listOnlineUsers.setFixedCellHeight(20);
         boxChatPane = new JTextPane();
+        boxChatPane.setEditable(false);
         if(!onlineUsers.isEmpty()){
             for (String user : onlineUsers) {
                 // create list box chat
@@ -58,10 +61,9 @@ public class ChatFrame extends JFrame implements ActionListener {
                 listOnlineUsersModel.addElement(user);
             }
         }
-        listOnlineUsers = new JList<>(listOnlineUsersModel);
         listOnlineUsers.addMouseListener(new MouseAdapter(){
             public void mouseClicked(MouseEvent e) {
-                if(e.getClickCount()==1){
+                if(e.getClickCount()>=1){
                     JList target = (JList)e.getSource();
                     int index = target.locationToIndex(e.getPoint());
                     if(index>=0){
@@ -76,6 +78,7 @@ public class ChatFrame extends JFrame implements ActionListener {
         });
         listOnlineUsersPane = new JScrollPane(listOnlineUsers);
         JScrollPane boxchatScrollPane = new JScrollPane(boxChatPane);
+
         sendButton = new JButton(new ImageIcon("images/sendIcon.png"));
         sendButton.addActionListener(this);
         sendButton.setActionCommand("send");
@@ -111,7 +114,7 @@ public class ChatFrame extends JFrame implements ActionListener {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.weightx=1;
         gbc.weighty=1;
-        gbc.insets = new Insets(0,5,0,5);
+        gbc.insets = new Insets(0,5,5,5);
         gbc.gridx = 1;
         gbc.gridy= 0;
         gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -120,15 +123,20 @@ public class ChatFrame extends JFrame implements ActionListener {
         gbc.fill = GridBagConstraints.BOTH;
         gbc.gridx = 1;
         gbc.gridy = 1;
-        gbc.gridheight = 4;
+        gbc.ipadx= 5;
+        gbc.gridheight = 3;
         contentPanel.add(boxchatScrollPane,gbc);
         gbc.ipady=0;
-
+        gbc.ipadx= 0;
         createSendPanel(sendPanel);
         gbc.gridx = 1;
-        gbc.gridy = 5;
+        gbc.gridy = 4;
         contentPanel.add(sendPanel,gbc);
+
         mainPanel.add(contentPanel,BorderLayout.CENTER);
+        JLabel header = new JLabel("User: "+username);
+        header.setHorizontalAlignment(SwingConstants.CENTER);
+        mainPanel.add(header,BorderLayout.PAGE_START);
         prepareGUI();
         startReceivingThread();
     }
@@ -174,8 +182,9 @@ public class ChatFrame extends JFrame implements ActionListener {
     }
     private void createLeftPanel(JPanel container){
         GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(0,5,5,5);
         gbc.weightx=1;
-        gbc.weighty=0.5;
+        gbc.weighty=0;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -185,7 +194,6 @@ public class ChatFrame extends JFrame implements ActionListener {
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.fill = GridBagConstraints.BOTH;
-        gbc.ipady=200;
         gbc.gridheight=5;
         container.add(listOnlineUsersPane,gbc);
         gbc.gridx = 0;
@@ -204,19 +212,18 @@ public class ChatFrame extends JFrame implements ActionListener {
         gbc.gridx = 1;
         container.add(emojiButton,gbc);
 
-        gbc.gridx=2;
+        gbc.gridx = 2;
         container.add(voiceButton,gbc);
 
 
-        gbc.gridx=0;
-        gbc.gridy=2;
-        gbc.gridwidth=2;
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.gridwidth = 2;
         gbc.fill = GridBagConstraints.BOTH;
         container.add(messageTextField,gbc);
 
         gbc.gridx=2;
         gbc.gridwidth=1;
-        gbc.ipadx = 0;
         container.add(sendButton,gbc);
     }
     private void prepareGUI(){
@@ -239,8 +246,13 @@ public class ChatFrame extends JFrame implements ActionListener {
         switch (command){
             case "send":{
                 String content = messageTextField.getText();
-                String username = nameUserLabel.getText();
-                data.findBoxChat(username).sendMessage(content);
+                String username = listOnlineUsers.getSelectedValue();
+                if(username==null){
+                    JOptionPane.showMessageDialog(this,"Please choose who to send message","Cannot send",JOptionPane.WARNING_MESSAGE);
+                    messageTextField.setText("");
+                    break;
+                }
+                data.findBoxChat(username).sendMessage(content,usernameOfClient);
                 messageTextField.setText("");
                 socketController.sendMessageToServer(content,username);
                 break;
