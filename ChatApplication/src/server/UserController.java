@@ -16,7 +16,7 @@ public class UserController {
     public UserController() {
         listUser = new ArrayList<>();
         try {
-            BufferedReader readFile = new BufferedReader(new FileReader(File.fileAccount));
+            BufferedReader readFile = new BufferedReader(new FileReader(SaveFileData.fileAccount));
             while(true){
                 String account = readFile.readLine();
                 if(account==null){
@@ -46,7 +46,7 @@ public class UserController {
         User newUser = new User(username,password);
         listUser.add(newUser);
         try {
-            PrintWriter writer = new PrintWriter(File.fileAccount);
+            PrintWriter writer = new PrintWriter(SaveFileData.fileAccount);
             synchronized(writer){
                 for(User user : listUser){
                     writer.println(user.getUsername()+" "+user.getPassword());

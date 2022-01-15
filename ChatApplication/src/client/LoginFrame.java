@@ -194,7 +194,7 @@ public class LoginFrame extends JFrame implements ActionListener {
                 new ChatFrame(socketController,username);
             }
             else{
-                JOptionPane.showMessageDialog(this,"Incorrect username or password","Login Failed",JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this,"Something wrong. Try it later!","Login Failed",JOptionPane.ERROR_MESSAGE);
             }
         }
         else if(command.equals("sign up")){

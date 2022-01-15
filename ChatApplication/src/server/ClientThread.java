@@ -6,7 +6,6 @@ package server;/*..
  */
 
 import java.io.*;
-import java.io.File;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,12 +44,22 @@ public class ClientThread extends Thread{
         try {
             while(true){
                 String command = br.readLine();
+                System.out.println("command: "+command);
                 switch(command){
                     case "login": {
                         String username = br.readLine();
                         String password = br.readLine();
                         Boolean isValidateSuccess = ChatServer.userController.validate(username, password);
-                        if (isValidateSuccess) {
+                        Boolean isLoginAlready = false;
+                        for (ClientThread cThread : ChatServer.clientThreadList) {
+                            if(cThread!=this&&cThread.user!=null) {
+                                if (cThread.user.getUsername().equals(username)) {
+                                    isLoginAlready = true;
+                                    break;
+                                }
+                            }
+                        }
+                        if (isValidateSuccess&&!isLoginAlready) {
                             System.out.println(username+" login successful");
                             bw.write("login success");
                             bw.newLine();
@@ -58,7 +67,7 @@ public class ClientThread extends Thread{
                             this.user = new User(username, password);
                             // send to other users
                             for (ClientThread cThread : ChatServer.clientThreadList) {
-                                if (cThread.equals(this)||cThread.user.getUsername().equals(username)) {
+                                if (cThread.equals(this)) {
                                     continue;
                                 }
                                 cThread.bw.write("new online user");
@@ -66,9 +75,9 @@ public class ClientThread extends Thread{
                                 cThread.bw.write(username);
                                 cThread.bw.newLine();
                                 cThread.bw.flush();
-                                System.out.println("show "+username+" is online to "+cThread.user.getUsername());
                             }
                         } else {
+                            ChatServer.clientThreadList.remove(this);
                             // login failed
                             System.out.println(username+" login failed.");
                             bw.write("login failed");
@@ -147,6 +156,7 @@ public class ClientThread extends Thread{
                             bw.flush();
                         }
                         else{
+                            ChatServer.clientThreadList.remove(this);
                             System.out.println(username+" sign up failed");
                             bw.write("sign up failed");
                             bw.newLine();
@@ -165,21 +175,60 @@ public class ClientThread extends Thread{
                             cThread.bw.newLine();
                             cThread.bw.flush();
                         }
+                        break;
+                    }
+                    case "download file":{
+                        try {
+                            String username = br.readLine();
+                            String fileName = br.readLine();
+                            String path = br.readLine();
+                            bw.write("receive download file");
+                            bw.newLine();
+                            bw.write(path);
+                            bw.newLine();
+                            bw.write(fileName);
+                            bw.newLine();
+                            bw.flush();
+                            File saveFile = new File(username+"/"+fileName);
+                            FileInputStream fis = new FileInputStream(saveFile);
+                            OutputStream os = socket.getOutputStream();
+                            byte[] bytes = new byte[1024];
+                            int numberBytesRead;
+                            while ((numberBytesRead = fis.read(bytes))>0){
+                                os.write(bytes, 0, numberBytesRead);
+                            }
+                            fis.close();
+                            os.flush();
+                        }catch (Exception e) {
+
+                        }
+                        break;
                     }
                     case "send file":{
                         try{
                             String otherUsername = br.readLine();
                             String fileName = br.readLine();
+                            File directory = new File(otherUsername);
+                            if(!directory.exists()){
+                                directory.mkdir();
+                            }
+                            File saveFile = new File(otherUsername+"/"+fileName);
                             int fileSize = Integer.parseInt(br.readLine());
-                            System.out.println(fileName+fileSize);
-                            InputStream is = socket.getInputStream();
-                            byte[] bytes = new byte[fileSize];
-                            BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(fileName));
-                            int file = is.read(bytes,0,bytes.length);
-                            bos.write(bytes,0,file);
                             System.out.println("Incoming File: " + fileName);
                             System.out.println("Size: " + fileSize + "Byte");
-
+                            InputStream is = socket.getInputStream();
+                            FileOutputStream fos = new FileOutputStream(saveFile);
+                            byte[] bytes = new byte[fileSize];
+                            int totalBytes = 0;
+                            int numberBytesRead;
+                            while((numberBytesRead = is.read(bytes))>0){
+                                fos.write(bytes, 0, numberBytesRead);
+                                totalBytes += numberBytesRead;
+                                if(totalBytes>=fileSize){
+                                    break;
+                                }
+                            }
+                            fos.close();
                             // send buffer to other clients
                             Boolean isExist = ChatServer.userController.isExistUsername(otherUsername);
                             if (isExist&&!otherUsername.equals(user.getUsername())){
@@ -201,8 +250,7 @@ public class ClientThread extends Thread{
                                     anotherUserThread.bw.newLine();
                                     anotherUserThread.bw.write(""+fileSize);
                                     anotherUserThread.bw.newLine();
-                                    anotherUserThread.socket.getOutputStream().write(bytes,0,bytes.length);
-                                    anotherUserThread.socket.getOutputStream().flush();
+                                    anotherUserThread.bw.flush();
                                 }
                             } else {
                                 bw.write("username not existed");
@@ -211,8 +259,6 @@ public class ClientThread extends Thread{
                                 bw.newLine();
                                 bw.flush();
                             }
-
-                            bos.close();
                         }catch(Exception e){
                             System.out.println(e.getMessage());
                         }
@@ -224,10 +270,19 @@ public class ClientThread extends Thread{
             }
         }catch(Exception exception){
             try {
-                if (socket.getInetAddress().isReachable(1000)) {
+                System.out.println("Exception: "+exception.getMessage());
+                if (socket.isConnected()) {
                     br.close();
                     bw.close();
                     ChatServer.clientThreadList.remove(this);
+                    for (ClientThread cThread : ChatServer.clientThreadList) {
+                        // send disconnect to other user
+                        cThread.bw.write("someone logout");
+                        cThread.bw.newLine();
+                        cThread.bw.write(this.user.getUsername());
+                        cThread.bw.newLine();
+                        cThread.bw.flush();
+                    }
                     System.out.println(user.getUsername()+" is disconnected");
                 }
             }catch (Exception e){

@@ -5,6 +5,6 @@ package server;/*..
  * Description:...
  */
 
-public class File {
+public class SaveFileData {
     public final static String fileAccount = "data.txt";
 }

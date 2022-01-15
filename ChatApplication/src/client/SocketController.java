@@ -44,9 +44,7 @@ public class SocketController {
             bw.flush();
             String command = br.readLine();
             if(command.equals("login success")){
-
                 return true;
-
             }
         }catch (IOException e) {
             System.out.println(e.getMessage());
@@ -78,10 +76,9 @@ public class SocketController {
     public  BufferedReader getReader(){
         return br;
     }
-    public void sendFilesToServer(File[] files,String otherUsername){
+    public void sendFilesToServer(File file,String otherUsername){
         try {
             OutputStream os = socket.getOutputStream();
-            for (File file:files){
                 bw.write("send file");
                 bw.newLine();
                 bw.write(otherUsername);
@@ -90,19 +87,35 @@ public class SocketController {
                 bw.newLine();
                 bw.write(""+file.length());
                 bw.newLine();
-                BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file));
-                int fileSize = (int)file.length();
-                byte[] bytes = new byte[fileSize];
-                bis.read(bytes,0,bytes.length);
-                os.write(bytes,0,fileSize);
+                bw.flush();
+                FileInputStream fis = new FileInputStream(file);
+                byte[] bytes = new byte[1024];
+                int numberByteRead;
+                while ((numberByteRead = fis.read(bytes)) > 0) {
+                    os.write(bytes, 0, numberByteRead);
+                }
+                fis.close();
                 os.flush();
-                System.out.println("Opening: " + file.getName() + ".");
-            }
         }catch (Exception e){
-
+            e.printStackTrace();
         }
 
 
+    }
+    public void sendDownloadFile(String username,String fileName,String path){
+        try {
+            bw.write("download file");
+            bw.newLine();
+            bw.write(username);
+            bw.newLine();
+            bw.write(fileName);
+            bw.newLine();
+            bw.write(path);
+            bw.newLine();
+            bw.flush();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
     public InputStream getInputStream(){
         try{
