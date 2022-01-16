@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ArtifactsWorkspaceSettings">
+    <artifacts-to-build>
+      <artifact name="Server:jar" />
+    </artifacts-to-build>
+  </component>
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="4896eadb-d445-4dd0-a6b2-6e0f8a756b2e" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/../Client/Client.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Client/src/META-INF/MANIFEST.MF" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Client/src/client/data/BoxChatData.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Client/src/client/data/Boxchat.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Client/src/client/data/FileAttach.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dbnavigator.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/server/ServerThread.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ChatApplication/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ChatApplication/.idea/dbnavigator.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ChatApplication/.idea/description.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ChatApplication/.idea/encodings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ChatApplication/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ChatApplication/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ChatApplication/.idea/project-template.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ChatApplication/.idea/uiDesigner.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ChatApplication/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ChatApplication/ChatApplication.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ChatApplication/data.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ChatApplication/images/attachIcon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ChatApplication/images/emojiIcon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ChatApplication/images/sendIcon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ChatApplication/images/showmore.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ChatApplication/images/voiceIcon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ChatApplication/out/production/ChatApplication/client/ChatClient.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ChatApplication/out/production/ChatApplication/client/ChatFrame$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ChatApplication/out/production/ChatApplication/client/ChatFrame$2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ChatApplication/out/production/ChatApplication/client/ChatFrame$3.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ChatApplication/out/production/ChatApplication/client/ChatFrame.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ChatApplication/out/production/ChatApplication/client/LoginFrame$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ChatApplication/out/production/ChatApplication/client/LoginFrame$2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ChatApplication/out/production/ChatApplication/client/LoginFrame.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ChatApplication/out/production/ChatApplication/client/SignupFrame$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ChatApplication/out/production/ChatApplication/client/SignupFrame$2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ChatApplication/out/production/ChatApplication/client/SignupFrame$3.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ChatApplication/out/production/ChatApplication/client/SignupFrame.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ChatApplication/out/production/ChatApplication/client/SocketController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ChatApplication/out/production/ChatApplication/client/Themes.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ChatApplication/out/production/ChatApplication/client/data/BoxChatData.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ChatApplication/out/production/ChatApplication/client/data/Boxchat.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ChatApplication/out/production/ChatApplication/client/data/FileAttach.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ChatApplication/out/production/ChatApplication/server/ChatServer.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ChatApplication/out/production/ChatApplication/server/ClientThread.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ChatApplication/out/production/ChatApplication/server/SaveFileData.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ChatApplication/out/production/ChatApplication/server/User.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ChatApplication/out/production/ChatApplication/server/UserController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ChatApplication/src/client/ChatClient.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ChatApplication/src/client/ChatFrame.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ChatApplication/src/client/LoginFrame.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ChatApplication/src/client/SignupFrame.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ChatApplication/src/client/SocketController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ChatApplication/src/client/Themes.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ChatApplication/src/client/data/BoxChatData.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ChatApplication/src/client/data/Boxchat.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ChatApplication/src/client/data/FileAttach.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ChatApplication/src/server/ChatServer.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ChatApplication/src/server/ClientThread.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ChatApplication/src/server/SaveFileData.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ChatApplication/src/server/User.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ChatApplication/src/server/UserController.java" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="23VBEq0RD5DOjwQEgDW4jS4YE6a" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectView">
+    <navigator currentView="ProjectPane" proportions="" version="1" splitterProportion="0.5">
+      <flattenPackages />
+      <showMembers />
+      <showModules />
+      <showLibraryContents />
+      <hideEmptyPackages />
+      <abbreviatePackageNames />
+      <autoscrollToSource />
+      <autoscrollFromSource />
+      <sortByType />
+    </navigator>
+    <panes>
+      <pane id="Scope" />
+      <pane id="PackagesPane" />
+      <pane id="ProjectPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="untitled104" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="untitled104" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="untitled104" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="untitled104" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="untitled104" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="company" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+    </panes>
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="ToolWindowEvent Log.ShowToolbar" value="false" />
+    <property name="create.test.in.the.same.root" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../Jar package" />
+    <property name="project.structure.last.edited" value="Artifacts" />
+    <property name="project.structure.proportion" value="0.15429688" />
+    <property name="project.structure.side.proportion" value="0.22196531" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Git repository\ChatApplication\ChatApplication" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Application.ChatServer">
+    <configuration name="ChatClient" type="Application" factoryName="Application" singleton="false" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="client.ChatClient" />
+      <module name="Server" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="client.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ChatFrame" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="client.ChatFrame" />
+      <module name="Server" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="client.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ChatServer" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="server.ChatServer" />
+      <module name="Server" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="server.SaveFileData" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="LoginFrame" type="Application" factoryName="Application" singleton="false" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="client.LoginFrame" />
+      <module name="Server" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="client.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="SignupFrame" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="client.SignupFrame" />
+      <module name="Server" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="client.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Application.ChatServer" />
+      <item itemvalue="Application.LoginFrame" />
+      <item itemvalue="Application.SignupFrame" />
+      <item itemvalue="Application.ChatFrame" />
+      <item itemvalue="Application.ChatClient" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.ChatServer" />
+        <item itemvalue="Application.ChatClient" />
+        <item itemvalue="Application.LoginFrame" />
+        <item itemvalue="Application.ChatFrame" />
+        <item itemvalue="Application.SignupFrame" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="4896eadb-d445-4dd0-a6b2-6e0f8a756b2e" name="Changes" comment="" />
+      <created>1641809270474</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1641809270474</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="XDebuggerManager">
+    <pin-to-top-manager>
+      <pinned-members>
+        <PinnedItemInfo parentTag="java.io.BufferedReader" memberName="cb" />
+      </pinned-members>
+    </pin-to-top-manager>
+    <watches-manager>
+      <configuration name="Application">
+        <watch expression="bw.cb" />
+      </configuration>
+    </watches-manager>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/ChatApplication$ChatClient.ic" NAME="ChatClient Coverage Results" MODIFIED="1642009488784" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>client.*</FILTER>
+    </SUITE>
+  </component>
+</project>
